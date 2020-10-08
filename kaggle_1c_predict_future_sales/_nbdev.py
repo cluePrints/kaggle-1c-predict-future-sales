@@ -2,9 +2,28 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {}
+index = {"read_train": "020_trivial_predict.ipynb",
+         "forecast_to_submission": "020_trivial_predict.ipynb",
+         "forecast_last_average": "020_trivial_predict.ipynb",
+         "target_forecast_start": "030_cv.ipynb",
+         "forecast_length_days": "030_cv.ipynb",
+         "sample_all_time": "030_cv.ipynb",
+         "sample_no_future": "030_cv.ipynb",
+         "train_all_time": "030_cv.ipynb",
+         "train_no_future": "030_cv.ipynb",
+         "test": "030_cv.ipynb",
+         "cross_join": "030_cv.ipynb",
+         "november_days": "030_cv.ipynb",
+         "test_dates": "030_cv.ipynb",
+         "extract_features": "030_cv.ipynb",
+         "single_fold": "030_cv.ipynb",
+         "ts_cv": "030_cv.ipynb",
+         "FeatureExtractor": "030_cv.ipynb",
+         "scaler": "030_cv.ipynb",
+         "Pipeline": "030_cv.ipynb"}
 
-modules = []
+modules = ["trivial_predict.py",
+           "cv.py"]
 
 doc_url = "https://fastai.github.io/kaggle_1c_predict_future_sales/"
 
