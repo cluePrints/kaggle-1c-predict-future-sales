@@ -41,7 +41,6 @@ test_dates = cross_join(test, pd.DataFrame({'date': november_days}))
 # Cell
 import pandas as pd
 
-# TODO: add item_id back
 def extract_features(sample_all_time, extraction_target, categorical_cols=['shop_id']):
     from sklearn.preprocessing import OneHotEncoder
     from scipy import sparse
@@ -51,20 +50,25 @@ def extract_features(sample_all_time, extraction_target, categorical_cols=['shop
     categorical_features = onehot_encoder.transform(extraction_target[categorical_cols])
     days_since = (extraction_target['date']-pd.to_datetime('2012-01-01')).dt.days
     days_since = days_since.to_numpy()[:,np.newaxis]
-    continuous_features = [days_since]
-    # Note to self: np would complain about sparse matrix being onedimensional :/
-    transformed_features = sparse.hstack([categorical_features] + continuous_features)
+    continuous_features = np.array(days_since)
 
-    from sklearn.preprocessing import StandardScaler
-    scaler = StandardScaler(with_mean=False)
+    from sklearn.preprocessing import StandardScaler, MinMaxScaler
+    dense_scaler  = MinMaxScaler()
+    sparse_scaler = StandardScaler(with_mean=False)
+
+    categorical_features = sparse_scaler.fit_transform(categorical_features)
+    continuous_features  = dense_scaler.fit_transform(continuous_features)
+
+    # Note to self: using sklearn stack, np would complain about sparse matrix being onedimensional :/
+    transformed_features = sparse.hstack([categorical_features, continuous_features])
 
     # Otherwise it's in COO and doesn't support indexing :/
     # Note to self: adding a new feature hurt SGD convergence which I initially misdiagnosed for sparse matrix mgmt issues
     transformed_features = transformed_features.tocsr()
-    transformed_features = scaler.fit_transform(transformed_features)
 
     return transformed_features
 
+# Cell
 def single_fold(regressor,
                 transformed_features,
                 dates_frame,
